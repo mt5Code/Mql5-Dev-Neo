@@ -2222,22 +2222,22 @@ void OnTick()
             DailyHighRaidTime = iTime(_Symbol, PERIOD_CURRENT, 0);
             if(!DailyHighCurrentRaidTime) DailyHighCurrentRaidTime = iTime(_Symbol, PERIOD_CURRENT, 0); // Set only on first raid
          }
-         bool is_duplicate = (ActiveHighLevel != DBL_MIN && MathAbs(ActiveHighLevel - level) < 2 * tick_size);
+         bool is_duplicate = (ActiveLowLevel != DBL_MAX && MathAbs(ActiveLowLevel - level) < 2 * tick_size);
          if(is_duplicate)
          {
-            string prev_name = ActiveHighLevelName;
-            if(prev_name == "AsiaHigh") { AsiaHighTrades = maxTradesPerRaidLevel; AsiaHighValidUntil = current_time; }
-            else if(prev_name == "LondonHigh") { LondonHighTrades = maxTradesPerRaidLevel; LondonHighValidUntil = current_time; }
-            Print("Duplicate high: Maxed active, activating " + level_name);
-            ActiveHighLevel = level;
-            ActiveHighLevelName = level_name;
+            string prev_name = ActiveLowLevelName;
+            if(prev_name == "LondonLow") { LondonLowTrades = maxTradesPerRaidLevel; LondonLowValidUntil = current_time; }
+            else if(prev_name == "DailyLow") { DailyLowTrades = maxTradesPerRaidLevel; DailyLowValidUntil = current_time; }
+            Print("Duplicate low: Maxed active, activating " + level_name);
+            ActiveLowLevel = level;
+            ActiveLowLevelName = level_name;
          }
-         else if(level > ActiveHighLevel)
+         else
          {
-            if(AsiaHigh > 0 && AsiaHigh < level) AsiaHighValidUntil = current_time;
-            if(LondonHigh > 0 && LondonHigh < level) LondonHighValidUntil = current_time;
-            ActiveHighLevel = level;
-            ActiveHighLevelName = level_name;
+            if(LondonLow > 0 && LondonLow > level) LondonLowValidUntil = current_time;
+            if(DailyLow > 0 && DailyLow > level) DailyLowValidUntil = current_time;
+            ActiveLowLevel = level;
+            ActiveLowLevelName = level_name;
          }
          if (RaidMustBeInKillzone)
          {
